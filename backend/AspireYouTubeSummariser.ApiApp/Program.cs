@@ -69,6 +69,23 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
+var weatherMessages = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+app.MapGet("/weather-focast", () =>
+{
+    var rng = new Random();
+    var forecast = Enumerable.Range(1, 5).Select(index => new
+    {
+        date = DateTime.Now.AddDays(-index).ToString("yyyy-MM-dd"),
+        temperatureC = rng.Next(-20, 36),
+        summary = summaries[rng.Next(summaries.Length)],
+        temperatureF = 32 + (int)(rng.Next(-20, 36) / 0.5556)
+    })
+    .ToArray();
+    return Results.Json(forecast);
+})
+.WithName("GetWeather-Forecast")
+.WithOpenApi();
+
 app.MapPost("/summarise", async ([FromBody] SummaryRequest req, YouTubeSummariserService service) =>
 {
     var summary = await service.SummariseAsync(req);

@@ -35,7 +35,9 @@
   - [ ] `/weather-focast` 엔드포인트 구현
   - [ ] 외부에서 접근할 수 있도록 Url 오픈
     - [ ] AppHost
-    - [ ] API
+    - [V] API
+      - [ ] 동작을 안함
+      - [ ] `/`로 접속하면 `/swagger`로 리다이렉션
 
 요청/응답 예시
 ```shell
