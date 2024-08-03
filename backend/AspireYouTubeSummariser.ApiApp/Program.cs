@@ -70,7 +70,7 @@ app.MapGet("/weatherforecast", () =>
 .WithOpenApi();
 
 var weatherMessages = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-app.MapGet("/weatherfocast", () =>
+app.MapGet("/weatherforecast", () =>
 {
     var rng = new Random();
     var forecast = Enumerable.Range(1, 5).Select(index => new

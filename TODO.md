@@ -32,7 +32,7 @@
 
 - 백엔드
   - [x] backend 디렉토리 아래 ASP.NET Core Web API로 개발
-  - [x] `/weatherfocast` 엔드포인트 구현
+  - [x] `/weatherforecast` 엔드포인트 구현
   - [ ] 외부에서 접근할 수 있도록 Url 오픈
     - [x] AppHost
     - [x] API
