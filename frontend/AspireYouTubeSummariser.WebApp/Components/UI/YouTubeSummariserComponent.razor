@@ -58,7 +58,7 @@
     {
         try
         {
-            var result = await ApiApp.SummariseAsync(youTubeLinkUrl, videoLanguageCode, summaryLanguageCode);
+            var result = await ApiApp.SummariseAsync(youTubeLinkUrl, videoLanguageCode, summaryLanguageCode, "");
             summaryResult = result;
         }
         catch (Exception ex)
