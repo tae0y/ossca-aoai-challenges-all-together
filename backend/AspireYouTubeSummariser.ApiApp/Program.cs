@@ -85,7 +85,7 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 
-record SummaryRequest(string? YouTubeLinkUrl, string VideoLanguageCode, string? SummaryLanguageCode);
+record SummaryRequest(string? YouTubeLinkUrl, string VideoLanguageCode, string? SummaryLanguageCode, string? SummaryStylePrompt);
 
 internal class YouTubeSummariserService(IYouTubeVideo youtube, AzureOpenAIClient openai, IConfiguration config)
 {
@@ -95,14 +95,21 @@ internal class YouTubeSummariserService(IYouTubeVideo youtube, AzureOpenAIClient
 
     public async Task<string> SummariseAsync(SummaryRequest req)
     {
+        // 자막을 읽을 수 없을 때 예외처리 추가
         Subtitle subtitle = await this._youtube.ExtractSubtitleAsync(req.YouTubeLinkUrl, req.VideoLanguageCode).ConfigureAwait(false);
-        string caption = subtitle.Content.Select(p => p.Text).Aggregate((a, b) => $"{a}\n{b}");
+        string caption = "";
+        try {
+            caption = subtitle.Content.Select(p => p.Text).Aggregate((a, b) => $"{a}\n{b}");
+        } catch (Exception ex) {
+            Console.WriteLine(ex.Message);
+            return "An error occurred while trying to extract the subtitles from the YouTube video. Please try again later.";
+        }
 
         var chat = this._openai.GetChatClient(this._config["OpenAI:DeploymentName"]);
         var messages = new List<ChatMessage>()
         {
             new SystemChatMessage(this._config["Prompt:System"]),
-            new SystemChatMessage($"Here's the transcript. Summarise it in 5 bullet point items in the given language code of \"{req.SummaryLanguageCode}\"."),
+            new SystemChatMessage($"Here's the transcript. \"{req.SummaryStylePrompt}\". The answer SHOULD BE with it in 5 bullet point items. The answer MUST BE in the given language code of \"{req.SummaryLanguageCode}\""),
             new UserChatMessage(caption),
         };
         ChatCompletionOptions options = new()

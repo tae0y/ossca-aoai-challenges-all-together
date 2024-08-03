@@ -14,13 +14,13 @@
     <div class="row">
         <div class="col">
             <div class="mb-3">
-                <label for="youtube-link" class="form-label"><strong>YouTube Link</strong></label>
+                <label for="youtube-link" class="form-label"><strong>링크를 입력해주세요 😌</strong></label>
                 <input class="form-control" id="youtube-link" placeholder="Add YouTube link here" @bind="youTubeLinkUrl" />
             </div>
         </div>
         <div class="col">
             <div class="mb-3">
-                <label for="video-language-code" class="form-label"><strong>영상 속 언어는 이거에요</strong></label>
+                <label for="video-language-code" class="form-label"><strong>영상 속 언어를</strong></label>
                 <select class="form-select" id="video-language-code" aria-label="Video language code" @bind="videoLanguageCode">
                     <option value="en" selected>🇺🇸 English</option>
                     <option value="ko">🇰🇷 Korean</option>
@@ -29,19 +29,28 @@
         </div>
         <div class="col">
             <div class="mb-3">
-                <label for="summary-language-code" class="form-label"><strong>이 언어로 요약해주세요</strong></label>
+                <label for="summary-language-code" class="form-label"><strong>이 언어로 요약할게요</strong></label>
                 <select class="form-select" id="summary-language-code" aria-label="Summary language code" @bind="summaryLanguageCode">
-                    <option value="en">🇺🇸 English</option>
-                    <option value="ko" selected>🇰🇷 Korean</option>
+                    <option value="English">🇺🇸 English</option>
+                    <option value="Korean" selected>🇰🇷 Korean</option>
                 </select>
             </div>
         </div>
     </div>
 
     <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label for="summary-style-prompt" class="form-label"><strong>어떤 스타일로 요약해볼까요?</strong></label>
+                <input class="form-control" id="summary-style-prompt" placeholder="summarize it in polite sentences but with lots of emojis 🥴" @bind="summaryStylePrompt" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="mb-3">
-            <button type="button" class="btn btn-primary" @onclick="SummariseAsync">요약하기!</button>
-            <button type="button" class="btn btn-secondary" @onclick="ClearAsync">모두지우기!</button>
+            <button id="summary" type="button" class="btn btn-primary" @onclick="SummariseAsync">그래! 요약해줘!</button>
+            <button type="button" class="btn btn-secondary" @onclick="ClearAsync">다 지우자!</button>
         </div>
     </div>
 
@@ -56,16 +65,18 @@
     <!-- 요약결과 -->
     <div class="row">
         <div class="mb-3">
-            <label for="summary" class="form-label"><strong>Summary</strong></label>
-            <textarea class="form-control" id="summary" rows="10" placeholder="Result will show here" readonly>@summaryResult</textarea>
+            <label for="summary" class="form-label"><strong>요약 결과를 확인해주세요</strong></label>
+            <textarea class="form-control" id="result" rows="10" placeholder="Result will show here" readonly>@summaryResult</textarea>
         </div>
     </div>
 </div>
 
 @code {
+
+    private string summaryStylePrompt = "";
     private string youTubeLinkUrl = string.Empty;
-    private string videoLanguageCode = "en";
-    private string summaryLanguageCode = "en";
+    private string videoLanguageCode = "en"; // Youtube 언어코드
+    private string summaryLanguageCode = "Korean"; // 프롬프트에 포함할 언어종류
     private string summaryResult = string.Empty;
 
     private bool summaryCompleted;
@@ -78,7 +89,11 @@
 
         try
         {
-            var result = await ApiApp.SummariseAsync(youTubeLinkUrl, videoLanguageCode, summaryLanguageCode);
+            if (summaryStylePrompt == string.Empty) //TODO: 좋은 방식의 코드인지는 잘 모르겠음
+            {
+                summaryStylePrompt = "summarize it in polite sentences with lots of emojis 🥴";
+            }
+            var result = await ApiApp.SummariseAsync(youTubeLinkUrl, videoLanguageCode, summaryLanguageCode, summaryStylePrompt);
             summaryResult = result;
         }
         catch (Exception ex)
@@ -97,8 +112,9 @@
     {
         youTubeLinkUrl = string.Empty;
         videoLanguageCode = "en";
-        summaryLanguageCode = "en";
+        summaryLanguageCode = "Korean";
         summaryResult = string.Empty;
+        summaryStylePrompt = string.Empty;
 
         await Task.CompletedTask;
     }

@@ -3,7 +3,7 @@ namespace AspireYouTubeSummariser.WebApp.Clients;
 public interface IApiAppClient
 {
     Task<List<ApiAppClient.WeatherForecast>> WeatherForecastAsync();
-    Task<string> SummariseAsync(string youTubeLinkUrl, string videoLanguageCode, string summaryLanguageCode);
+    Task<string> SummariseAsync(string youTubeLinkUrl, string videoLanguageCode, string summaryLanguageCode, string summaryStylePrompt);
 }
 
 public class ApiAppClient(HttpClient http) : IApiAppClient
@@ -18,11 +18,11 @@ public class ApiAppClient(HttpClient http) : IApiAppClient
         return forecasts ?? [];
     }
 
-    public async Task<string> SummariseAsync(string youTubeLinkUrl, string videoLanguageCode, string summaryLanguageCode)
+    public async Task<string> SummariseAsync(string youTubeLinkUrl, string videoLanguageCode, string summaryLanguageCode, string summaryStylePrompt)
     {
         using var response = await _http.PostAsJsonAsync(
             "summarise",
-            new { youTubeLinkUrl, videoLanguageCode, summaryLanguageCode }).ConfigureAwait(false);
+            new { youTubeLinkUrl, videoLanguageCode, summaryLanguageCode, summaryStylePrompt }).ConfigureAwait(false);
 
         var summary = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         return summary;
