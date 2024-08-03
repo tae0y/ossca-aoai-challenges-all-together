@@ -57,13 +57,11 @@ var summaries = new[]
 app.MapGet("/weatherforecast", () =>
 {
     var rng = new Random();
-    var forecast = Enumerable.Range(1, 5).Select(index => new
-    {
-        date = DateTime.Now.AddDays(-index).ToString("yyyy-MM-dd"),
-        temperatureC = rng.Next(-20, 36),
-        summary = summaries[rng.Next(summaries.Length)],
-        temperatureF = 32 + (int)(rng.Next(-20, 36) / 0.5556)
-    })
+    var forecast = Enumerable.Range(1, 5).Select(index => new WeatherForecast (
+        DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+        rng.Next(-20, 36),
+        summaries[rng.Next(summaries.Length)]
+    ))
     .ToArray();
     return Results.Json(forecast);
 })
