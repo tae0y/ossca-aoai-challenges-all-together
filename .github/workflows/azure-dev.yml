@@ -75,9 +75,7 @@ jobs:
       - name: Provision Infrastructure
         run: |
           azd provision --no-prompt
-          popd
       
       - name: Deploy Application
         run: |
           azd deploy --no-prompt
-          popd
