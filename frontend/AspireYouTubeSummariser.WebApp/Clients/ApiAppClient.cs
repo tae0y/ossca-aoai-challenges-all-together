@@ -12,7 +12,7 @@ public class ApiAppClient(HttpClient http) : IApiAppClient
 
     public async Task<List<WeatherForecast>> WeatherForecastAsync()
     {
-        using var response = await _http.GetAsync("weather-focast").ConfigureAwait(false);
+        using var response = await _http.GetAsync("weatherfocast").ConfigureAwait(false);
 
         var forecasts = await response.Content.ReadFromJsonAsync<List<WeatherForecast>>().ConfigureAwait(false);
         return forecasts ?? [];
