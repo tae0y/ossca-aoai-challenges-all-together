@@ -1,12 +1,12 @@
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - 'apphost/**/*'
-      - 'backend/**/*'
-      - 'frontend/**/*'
+  #push:
+  #  branches:
+  #    - main
+  #  paths:
+  #    - 'apphost/**/*'
+  #    - 'backend/**/*'
+  #    - 'frontend/**/*'
 
 permissions:
   id-token: write
