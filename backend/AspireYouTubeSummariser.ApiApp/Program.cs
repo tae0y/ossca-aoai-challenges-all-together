@@ -56,22 +56,6 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
-var weatherMessages = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-app.MapGet("/weatherforecast", () =>
-{
     var rng = new Random();
     var forecast = Enumerable.Range(1, 5).Select(index => new
     {
@@ -83,7 +67,7 @@ app.MapGet("/weatherforecast", () =>
     .ToArray();
     return Results.Json(forecast);
 })
-.WithName("GetWeather-Forecast")
+.WithName("GetWeatherForecast")
 .WithOpenApi();
 
 app.MapPost("/summarise", async ([FromBody] SummaryRequest req, YouTubeSummariserService service) =>
