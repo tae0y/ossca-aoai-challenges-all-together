@@ -1,0 +1,56 @@
+﻿@page "/weather"
+@using AspireYouTubeSummariser.WebApp.Clients
+@using Microsoft.AspNetCore.OutputCaching
+
+<!-- 이 구문으로 레디스 캐시를 사용한다 -->
+@attribute [StreamRendering(true)]
+@attribute [OutputCache(Duration = 10)] //타임아웃은10초
+
+@inject IApiAppClient ApiApp
+
+<PageTitle>Weather</PageTitle>
+
+<h1>Weather</h1>
+
+<p>This component demonstrates showing data.</p>
+
+<!-- 캐시 효과를 눈으로 보기 위한 구문 -->
+<p>@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")</p>
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<ApiAppClient.WeatherForecast>? forecasts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await ApiApp.WeatherForecastAsync();
+    }
+}
