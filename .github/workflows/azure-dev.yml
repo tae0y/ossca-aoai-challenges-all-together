@@ -8,6 +8,7 @@ on:
       - 'apphost/**/*'
       - 'backend/**/*'
       - 'frontend/**/*'
+      - .github/**/*
 
 permissions:
   id-token: write
