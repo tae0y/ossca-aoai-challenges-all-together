@@ -18,3 +18,12 @@ System.UriFormatException: Invalid URI: The format of the URI could not be deter
 ```
 
 - 깃헙에 openai 키값 커밋을 안해뒀더니 이제 여기서 null 오류가 난다! 보통 다른 사람들은 어떻게 하지? 
+
+- `azd`
+```
+AZURE_ENV_NAME="tae0y"
+azd init -e $AZURE_ENV_NAME
+
+azd pipeline config
+```
+

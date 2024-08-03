@@ -1,12 +1,13 @@
 on:
   workflow_dispatch:
-  #push:
-  #  branches:
-  #    - main
-  #    - master
-  #  paths:
-  #    - 'front/**/*'
-  #    - 'backend/**/*'
+  push:
+    branches:
+      - main
+      - Feat-AzureDeploy
+    paths:
+      - 'apphost/**/*'
+      - 'backend/**/*'
+      - 'frontend/**/*'
 
 # GitHub Actions workflow to deploy to Azure using azd
 # To configure required secrets for connecting to Azure, simply run `azd pipeline config`
